@@ -518,7 +518,7 @@
  	public static bool downedDeerclops = false;
  	public static int ShieldStrengthTowerSolar = 0;
  	public static int ShieldStrengthTowerVortex = 0;
-@@ -4594,59 +_,222 @@
+@@ -4594,59 +_,226 @@
  	public static bool TowerActiveNebula = false;
  	public static bool TowerActiveStardust = false;
  	public static bool LunarApocalypseIsUp = false;
@@ -618,6 +618,10 @@
 +	/// Stores the value of <see cref="defense"/> at the end of SetDefaults. Useful for scaling defense in AI code, like how King Slime changes defense as it gets smaller.
 +	/// </summary>
  	public int defDefense;
++
++	/// <summary>
++	/// Stores the value of <see cref="lifeMax"/> at the end of SetDefaults, before any difficulty or multiplayer life scaling is applied. Used as the base value when (re)scaling the NPC's maximum life.
++	/// </summary>
  	public int defLifeMax;
 +
 +	/// <summary>
@@ -2714,14 +2718,15 @@
  			return;
  
  		int num = FindBuffIndex(buffTypeToRemove);
-@@ -75575,6 +_,10 @@
+@@ -75575,6 +_,11 @@
  		}
  	}
  
 +	/// <summary>
-+	/// Removes the buff at the provided index and shuffles the remaining buff indexes down to fill the gap. The buff types and times will then be synced to clients. This method should only be called on the server or in single player.
++	/// Removes the buff at the provided index and shuffles the remaining buff indexes down to fill the gap. Unless <paramref name="quiet"/> is <see langword="true"/>, the buff types and times will then be synced to clients. This method should only be called on the server or in single player.
 +	/// </summary>
 +	/// <param name="buffIndex">The index of the buff to remove.</param>
++	/// <param name="quiet">If <see langword="true"/>, the removal will not be synced to other clients (the <see cref="MessageID.NPCBuffs"/> network message is skipped). Defaults to <see langword="false"/>.</param>
  	public void DelBuff(int buffIndex, bool quiet = false)
  	{
  		buffTime[buffIndex] = 0;

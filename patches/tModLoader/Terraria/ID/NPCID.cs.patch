@@ -265,9 +265,19 @@
  		public static List<int> TownNPCBestiaryPriority = new List<int> {
  			22,
  			17,
-@@ -5159,12 +_,43 @@
+@@ -5157,14 +_,53 @@
+ 			37,
+ 			687
  		};
++		/// <summary>
++		/// If <see langword="true"/> for a given NPC type (<see cref="NPC.type"/>), then that NPC is allowed to spawn in midair when it is spawned around a player (the "spawn on player" logic used by events and bosses) on Skyblock worlds, where the lack of solid ground would otherwise prevent the spawn.
++		/// <br/> Defaults to <see langword="false"/>.
++		/// </summary>
  		public static bool[] SpawnOnPlayerCanSpawnInMidairOnSkyblock = Factory.CreateBoolSet(4, 266, 222, 125, 126, 127, 262, 551);
++		/// <summary>
++		/// If <see langword="true"/> for a given NPC type (<see cref="NPC.type"/>), then that NPC will not drop Hardmode biome keys (such as the Jungle Key or Hallowed Key, used to open the biome chests in the Dungeon) or biome Souls (Soul of Light, Soul of Night, etc.), even if it otherwise meets the requirements (positive coin value during Hardmode).
++		/// <br/> Defaults to <see langword="false"/>.
++		/// </summary>
  		public static bool[] DontDropDungeonKeysOrSouls = Factory.CreateBoolSet(23);
 +
 +		/// <summary>
@@ -310,7 +320,7 @@
  			443,
  			442,
  			592,
-@@ -5180,13 +_,40 @@
+@@ -5180,13 +_,44 @@
  			448,
  			539
  		};
@@ -330,6 +340,10 @@
 +		/// <br/> Defaults to <see langword="false"/>.
 +		/// </summary>
  		public static bool[] ZappingJellyfish = Factory.CreateBoolSet(63, 64, 103, 242);
++		/// <summary>
++		/// Overrides whether the Hunter Potion treats an NPC type (<see cref="NPC.type"/>) as friendly, bypassing the usual checks in <see cref="NPC.AppearsFriendlyToHunterPotion"/>.
++		/// <br/> <see langword="null"/> (the default) keeps the normal behavior, <see langword="true"/> forces the NPC to be treated as friendly, and <see langword="false"/> forces it to be treated as an enemy.
++		/// </summary>
  		public static bool?[] HunterPotionFriendlyOverride = Factory.CreateCustomSet<bool?>(null, new object[2] {
  			(short)689,
  			false
@@ -377,7 +391,7 @@
  		public static Dictionary<int, Vector2> NPCPortraitsFullBodyRetroOffsets = new Dictionary<int, Vector2> {
  			{ 18, new Vector2(-3f, 0f) },
  			{ 20, new Vector2(-4f, 0f) },
-@@ -5297,63 +_,393 @@
+@@ -5297,63 +_,428 @@
  			{ 683, new Vector2(-6f, 0f) },
  			{ 682, new Vector2(-6f, 0f) }
  		};
@@ -432,7 +446,15 @@
 +		/// </remarks>
  		public static bool[] UsesNewTargeting = Factory.CreateBoolSet(547, 552, 553, 554, 561, 562, 563, 555, 556, 557, 558, 559, 560, 576, 577, 568, 569, 566, 567, 570, 571, 572, 573, 564, 565, 574, 575, 551, 578, 210, 211, 620, 668);
 +
++		/// <summary>
++		/// If <see langword="true"/> for a given NPC type (<see cref="NPC.type"/>), then that NPC, while using the flying bird AI, can drop a <see cref="ProjectileID.BirdDroppings"/> projectile on a player it flies over.
++		/// <br/> Defaults to <see langword="false"/>.
++		/// </summary>
  		public static bool[] BirdThatCanPoop = Factory.CreateBoolSet(74, 297, 298, 442, 363, 365, 603, 609, 671, 672, 673, 674, 675);
++		/// <summary>
++		/// If <see langword="true"/> for a given NPC type (<see cref="NPC.type"/>), then that passive critter can randomly turn hostile and attack the player, gaining increased health when it does.
++		/// <br/> Defaults to <see langword="false"/>.
++		/// </summary>
  		public static bool[] CritterThatCanTurnOnPlayers = Factory.CreateBoolSet(645, 639, 644, 642, 643, 641, 640, 299, 539, 538);
 +
 +		/// <summary>
@@ -454,10 +476,24 @@
 +		/// </summary>
  		public static bool[] HurtingBees = Factory.CreateBoolSet(210, 211);
 +
++		/// <summary>
++		/// If <see langword="true"/> for a given NPC type (<see cref="NPC.type"/>), then that NPC can be damaged by hostile bee NPCs (those in the <see cref="HurtingBees"/> set).
++		/// <br/> Defaults to <see langword="true"/>.
++		/// </summary>
  		public static bool[] CanBeHurtByBees = Factory.CreateBoolSet(true, 210, 211, 222);
 +
++		/// <summary>
++		/// If <see langword="true"/> for a given NPC type (<see cref="NPC.type"/>), then that NPC will be pushed by conveyor belt tiles.
++		/// <br/> Town NPCs and harmless critters (5 max life and 0 damage) are always pushed by conveyor belts regardless of this set.
++		/// <br/> Defaults to <see langword="false"/>.
++		/// </summary>
  		public static bool[] ConveyorBeltCollision = Factory.CreateBoolSet(624, 85, 629, 195, 1, 147, 184, 537, 204, 16, 59, 71, 535, 225, 676, 303, 335, 336, 333, 334, 667, 141, 81, 121, 183, 138, 244, 304, 105, 123, 685, 686, 687, 106, 354, 376, 579, 589, 37, 695, 696);
 +
++		/// <summary>
++		/// If <see langword="true"/> for a given NPC type (<see cref="NPC.type"/>), then that slime can contain an item, which is drawn inside its body and dropped when it is killed.
++		/// <br/> The contained item type is stored in the NPC's <see cref="NPC.ai"/>[1].
++		/// <br/> Defaults to <see langword="false"/>.
++		/// </summary>
  		public static bool[] SlimeCanContainItems = Factory.CreateBoolSet(1, 59, 147, 184, 537);
 +
 +		/// <summary>
@@ -512,8 +548,16 @@
 +		/// </summary>
  		public static bool[] SearchSpawnSlotsInReverse = Factory.CreateBoolSet(222, 245);
 +
++		/// <summary>
++		/// If <see langword="true"/> for a given NPC type (<see cref="NPC.type"/>), then that NPC will never be assigned slot 0 of the <see cref="Main.npc"/> array when it is spawned.
++		/// <br/> Defaults to <see langword="false"/>.
++		/// </summary>
  		public static bool[] CannotSpawnInSlot0 = Factory.CreateBoolSet(134, 135, 136, 7, 8, 9, 10, 11, 12, 13, 14, 15, 39, 40, 41, 87, 88, 89, 90, 91, 92, 95, 96, 97, 98, 99, 100, 117, 118, 119, 375, 402, 412, 413, 414, 454, 455, 456, 457, 458, 459, 510, 511, 512, 513, 514, 515, 621, 622, 623);
 +
++		/// <summary>
++		/// If <see langword="true"/> for a given NPC type (<see cref="NPC.type"/>), then on a multiplayer client that NPC will skip its update while the tiles surrounding it have not yet been synced from the server.
++		/// <br/> Defaults to <see langword="true"/>.
++		/// </summary>
  		public static bool[] SkipUpdateInUnsyncedTiles = Factory.CreateBoolSet(true, 135, 136, 14, 15, 8, 9, 11, 12, 40, 41, 96, 97, 99, 100, 118, 119, 622, 623, 511, 512, 514, 515, 455, 456, 457, 458, 459, 89, 90, 91, 92, 413, 414);
 +
 +		/// <summary>
@@ -720,6 +764,11 @@
 +		/// </summary>
  		public static bool[] ShouldBeCountedAsBossForBestiary = Factory.CreateBoolSet(false, 517, 422, 507, 493, 13, 664);
 +
++		/// <summary>
++		/// If <see langword="true"/> for a given NPC type (<see cref="NPC.type"/>), then that NPC is treated as a boss when hit by a <see cref="ProjectileID.RainbowBoulder"/>, causing the boulder to be destroyed instead of rolling through.
++		/// <br/> Bosses (<see cref="NPC.boss"/>) are always treated this way regardless of this set.
++		/// <br/> Defaults to <see langword="false"/>.
++		/// </summary>
  		public static bool[] ShouldBeCountedAsBossForRainbowBoulders = Factory.CreateBoolSet(false, 517, 422, 507, 493, 13, 14, 15, 267, 36, 114, 664, 134, 135, 136, 128, 129, 130, 131, 245, 247, 248, 246, 491, 492, 392, 395, 394, 393, 564, 565, 576, 577, 551, 325, 327, 344, 345, 346);
 +
 +		/// <summary>
